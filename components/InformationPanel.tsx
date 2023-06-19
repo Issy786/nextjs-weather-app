@@ -54,7 +54,7 @@ function InformationPanel({ city, lat, long, results }: Props) {
       <div className="flex items-center justify-between">
         <div>
           <Image
-            src={`https://www.weatherbit.io/static/img/icons${
+            src={`https://www.weatherbit.io/static/img/icons/${
               weatherCodeToString[results.current_weather.weathercode].icon
             }.png`}
             alt={weatherCodeToString[results.current_weather.weathercode].label}
