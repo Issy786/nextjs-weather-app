@@ -1,5 +1,6 @@
 import { getClient } from "@/apollo-client";
 import CalloutCard from "@/components/CalloutCard";
+import InformationPanel from "@/components/InformationPanel";
 import StatCard from "@/components/StatCard";
 import fetchWeatherQuery from "@/graphql/queries/fetchWeatherQueries";
 
@@ -41,9 +42,10 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
   console.log(results);
 
   return (
-    <div>
-      {/* <InfoPanel /> */}
-      <div>
+    <div className="flex flex-col min-h-screen md:flex-row">
+      <InformationPanel city={city} long={long} lat={lat} results={results} />
+
+      <div className="flex-1 p-5 lg:p-10">
         <div className="p-5">
           <div className="pb-5">
             <h2 className="text-xl font-bold">Todays Overview</h2>
@@ -61,13 +63,13 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 m-2">
             <StatCard
               title="Maximum Temperature"
-              metric={`${results.daily.temperature_2m_max[0].toFixed(1)}°`}
+              metric={`${results.daily.temperature_2m_max[0].toFixed(1)}°C`}
               color="yellow"
             />
 
             <StatCard
               title="Minimum Temperature"
-              metric={`${results.daily.temperature_2m_min[0].toFixed(1)}°`}
+              metric={`${results.daily.temperature_2m_min[0].toFixed(1)}°C`}
               color="green"
             />
 
@@ -98,6 +100,14 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
               />
             </div>
           </div>
+        </div>
+
+        <hr className="mb-5" />
+
+        <div className="space-y-3">
+          {/* TempChart */}
+          {/* RainChart */}
+          {/* HumidityChart */}
         </div>
       </div>
     </div>
