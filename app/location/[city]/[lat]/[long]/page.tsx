@@ -6,6 +6,8 @@ import RainChart from "@/components/RainChart";
 import StatCard from "@/components/StatCard";
 import TempChart from "@/components/TempChart";
 import fetchWeatherQuery from "@/graphql/queries/fetchWeatherQueries";
+import cleanData from "@/lib/cleanData";
+import getBasePath from "@/lib/getBasePath";
 
 export const revalidate = 60;
 
@@ -20,12 +22,6 @@ type Props = {
 async function WeatherPage({ params: { city, lat, long } }: Props) {
   const client = getClient();
 
-  // let test = null;
-
-  // if (typeof window !== "undefined") {
-  // This code will only run on the client side
-
-  // try {
   const { data } = await client.query({
     query: fetchWeatherQuery,
     variables: {
@@ -38,13 +34,20 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
 
   const results: Root = data.myQuery;
 
-  //   test = results;
-  // } catch (error) {
-  //   console.error("There was an error!", error);
-  // }
-  // console.log(results, "here");
+  const dataToSend = cleanData(results, city);
 
-  // console.log(results);
+  const res = await fetch(`${getBasePath()}/api/getWeatherSummary`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      weatherData: dataToSend,
+    }),
+  });
+
+  const GPTdata = await res.json();
+  const { content } = GPTdata;
 
   return (
     <div className="flex flex-col min-h-screen md:flex-row">
@@ -62,7 +65,7 @@ async function WeatherPage({ params: { city, lat, long } }: Props) {
           </div>
 
           <div className="m-2 mb-10">
-            <CalloutCard message="This is where GPT-4 summary will go" />
+            <CalloutCard message={content} />
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 m-2">
