@@ -2,7 +2,6 @@
 
 import { Country, City } from "country-state-city";
 import { useRouter } from "next/navigation";
-import { type } from "os";
 import { useState } from "react";
 import Select from "react-select";
 import { GlobeIcon } from "@heroicons/react/solid";
